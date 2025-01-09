@@ -16,6 +16,11 @@ namespace Vehicle.Infrastructure.Persistence
         }
 
         public DbSet<Customer> Customers { get; set; }
+        public DbSet<JobSeeker> JobSeekers { get; set; }
+        public DbSet<JobAdvertiser> JobAdvertisers { get; set; }
+        public DbSet<JobPosting> JobPostings { get; set; }
+        public DbSet<JobSeekerSkill> JobSeekerSkills { get; set; }
+        public DbSet<JobSeekerExperience> JobSeekerExperiences { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -34,6 +39,34 @@ namespace Vehicle.Infrastructure.Persistence
                 .Property(c => c.PhoneNumber)
                 .HasMaxLength(15)
                 .IsRequired();
+
+            // JobSeeker indexes
+            modelBuilder.Entity<JobSeeker>()
+                .HasIndex(js => js.Email)
+                .IsUnique();
+            modelBuilder.Entity<JobSeeker>()
+                .Property(js => js.PhoneNumber)
+                .HasMaxLength(15).IsRequired();
+
+            // JobAdvertiser indexes
+            modelBuilder.Entity<JobAdvertiser>()
+            .HasIndex(ja => ja.ContactEmail)
+            .IsUnique();
+            modelBuilder.Entity<JobAdvertiser>()
+                .Property(ja => ja.ContactPhoneNumber)
+                .HasMaxLength(15)
+                .IsRequired();
+
+            // Specify relationships
+            modelBuilder.Entity<JobSeekerSkill>()
+                        .HasOne(js => js.JobSeeker)
+                        .WithMany(j => j.Skills)
+                        .HasForeignKey(js => js.JobSeekerId);
+
+            modelBuilder.Entity<JobSeekerExperience>()
+                     .HasOne(js => js.JobSeeker)
+                     .WithMany(j => j.Experience)
+                     .HasForeignKey(js => js.JobSeekerId);
         }
     }
 }
