@@ -6,10 +6,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddApplicationServices();
-builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
 // builder.Services.AddSwaggerGen();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -39,8 +38,11 @@ builder.Services.AddSwaggerGen(c =>
               new string[] {}
         }
     });
+    // Register the operation filter to handle AllowAnonymous endpoints
+    //c.OperationFilter<AllowAnonymousOperationFilter>();
 });
 
+builder.Services.AddInfrastructureServices(builder.Configuration);
 
 var app = builder.Build();
 

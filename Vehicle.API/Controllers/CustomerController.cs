@@ -8,7 +8,7 @@ using Vehicle.Application.Features.Customers.Queries;
 
 namespace Vehicle.API.Controllers
 {
-    [Authorize]
+    //[Authorize] // has generally set in startup
     [Route("api/[controller]")]
     [ApiController]
     public class CustomerController : ControllerBase
