@@ -1,4 +1,6 @@
 using Microsoft.OpenApi.Models;
+using Vehicle.API.Middleware;
+using Vehicle.API.SwaggerFilter;
 using Vehicle.Application;
 using Vehicle.Infrastructure;
 
@@ -39,7 +41,7 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
     // Register the operation filter to handle AllowAnonymous endpoints
-    //c.OperationFilter<AllowAnonymousOperationFilter>();
+    c.OperationFilter<AllowAnonymousOperationFilter>();
 });
 
 builder.Services.AddInfrastructureServices(builder.Configuration);
@@ -52,9 +54,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseRouting(); 
-app.UseAuthentication();
+app.UseRouting();
+// Use custom middleware to append Bearer prefix
+app.UseMiddleware<TokenMiddleware>();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
