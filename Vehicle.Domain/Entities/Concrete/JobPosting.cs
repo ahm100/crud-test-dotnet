@@ -11,6 +11,7 @@ namespace Vehicle.Domain.Entities.Concrete
     {
         public string Title { get; set; }
         public string Description { get; set; }
+        public string ReferenceNumber { get; set; }
         public DateTime PostDate { get; set; } = DateTime.Now;
         public DateTime? ExpiryDate { get; set; }
         public decimal Salary { get; set; }
