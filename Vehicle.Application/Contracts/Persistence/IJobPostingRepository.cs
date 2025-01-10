@@ -7,7 +7,7 @@ using Vehicle.Domain.Entities.Concrete;
 
 namespace Vehicle.Application.Contracts.Persistence
 {
-    internal interface IJobPosting : IAsyncRepository<JobPosting>
+    public interface IJobPostingRepository : IAsyncRepository<JobPosting>
     {
     }
 }
