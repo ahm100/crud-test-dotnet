@@ -55,8 +55,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseRouting();
-// Use custom middleware to append Bearer prefix
-app.UseMiddleware<TokenMiddleware>();
+
+app.UseMiddleware<TokenMiddleware>();// Use custom middleware to append Bearer prefix
+
+app.UseMiddleware<ExceptionHandlingMiddleware>(); // Register the middleware
 
 app.UseAuthentication();
 app.UseAuthorization();
