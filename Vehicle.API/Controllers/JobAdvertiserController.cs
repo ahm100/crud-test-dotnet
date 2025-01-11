@@ -56,5 +56,13 @@ namespace Vehicle.API.Controllers
             return Ok(result);
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _mediator.Send(new DeleteJobAdvertiserCommand { Id = id });
+            return NoContent();
+        }
+
+
     }
 }
