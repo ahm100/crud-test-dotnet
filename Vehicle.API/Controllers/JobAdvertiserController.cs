@@ -41,5 +41,20 @@ namespace Vehicle.API.Controllers
             var result = await _mediator.Send(new GetJobAdvertiserByIdQuery { Id = id });
             return Ok(result);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var result = await _mediator.Send(new GetAllJobAdvertisersQuery());
+            return Ok(result);
+        }
+
+        [HttpGet("company/{companyName}")]
+        public async Task<IActionResult> GetByCompanyName(string companyName)
+        {
+            var result = await _mediator.Send(new GetJobAdvertiserByCompanyNameQuery { CompanyName = companyName });
+            return Ok(result);
+        }
+
     }
 }
