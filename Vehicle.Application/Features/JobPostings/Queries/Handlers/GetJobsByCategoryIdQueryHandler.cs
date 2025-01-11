@@ -1,5 +1,4 @@
-﻿
-using MediatR;
+﻿using MediatR;
 using AutoMapper;
 using Vehicle.Application.Contracts.Persistence;
 using Vehicle.Application.Features.JobPostings.Queries;
@@ -23,7 +22,7 @@ namespace Vehicle.Application.Features.JobPostings.Queries.Handlers
 
         public async Task<List<JobPostingDto>> Handle(GetJobsByCategoryIdQuery request, CancellationToken cancellationToken)
         {
-            var jobPostings = await _repository.GetAsync(jp => jp.JobCategoryId == request.CategoryId);
+            var jobPostings = await _repository.GetByCategoryIdAsync(request.CategoryId, request.PageNumber, request.PageSize);
             return _mapper.Map<List<JobPostingDto>>(jobPostings);
         }
     }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -15,35 +14,35 @@ namespace Vehicle.Infrastructure.Repositories
         {
         }
 
-        public async Task<IReadOnlyList<JobSeeker>> GetBySkillAsync(string skill)
+        public async Task<IReadOnlyList<JobSeeker>> GetBySkillAsync(string skill, int pageNumber = 1, int pageSize = 10)
         {
-            return await GetAsync(js => js.Skills.Any(s => s.SkillName == skill));
+            return await GetAsync(js => js.Skills.Any(s => s.SkillName == skill), pageNumber: pageNumber, pageSize: pageSize);
         }
 
-        public async Task<IReadOnlyList<JobSeeker>> GetByBirthYearAsync(int year)
+        public async Task<IReadOnlyList<JobSeeker>> GetByBirthYearAsync(int year, int pageNumber = 1, int pageSize = 10)
         {
-            return await GetAsync(js => js.DateOfBirth.Year < year);
+            return await GetAsync(js => js.DateOfBirth.Year == year, pageNumber: pageNumber, pageSize: pageSize);
         }
 
-        public async Task<IReadOnlyList<JobSeeker>> GetOrderedByLastNameAsync()
+        public async Task<IReadOnlyList<JobSeeker>> GetOrderedByLastNameAsync(int pageNumber = 1, int pageSize = 10)
         {
-            return await GetAsync(predicate: null, orderBy: query => query.OrderBy(js => js.LastName), includes: null);
+            return await GetAsync(predicate: null, orderBy: query => query.OrderBy(js => js.LastName), includeString: null, disableTracking: true, pageNumber: pageNumber, pageSize: pageSize);
         }
 
-
-        public async Task<IReadOnlyList<JobSeeker>> GetWithRelatedDataAsync()
+        public async Task<IReadOnlyList<JobSeeker>> GetWithRelatedDataAsync(int pageNumber = 1, int pageSize = 10)
         {
             var includes = new List<Expression<Func<JobSeeker, object>>>
             {
                 js => js.Skills,
                 js => js.Experience
             };
-            return await GetAsync(predicate: null, orderBy: null, includes: includes);
+            return await GetAsync(predicate: null, orderBy: null, includes: includes, disableTracking: true, pageNumber: pageNumber, pageSize: pageSize);
         }
 
         public async Task<JobSeeker> GetByEmailAsync(string email)
         {
-            return (await GetAsync(js => js.Email == email)).FirstOrDefault();
+            var jobSeekers = await GetAsync(js => js.Email == email, orderBy: null, includeString: null, disableTracking: true);
+            return jobSeekers.FirstOrDefault();
         }
     }
 }

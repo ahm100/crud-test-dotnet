@@ -6,9 +6,9 @@ namespace Vehicle.Application.Contracts.Persistence
 {
     public interface IJobAdvertiserRepository : IAsyncRepository<JobAdvertiser>
     {
-        Task<IReadOnlyList<JobAdvertiser>> GetByCompanyNameAsync(string companyName);
-        Task<IReadOnlyList<JobAdvertiser>> GetOrderedByContactEmailAsync();
-        Task<IReadOnlyList<JobAdvertiser>> GetWithPostedJobsAsync();
+        Task<IReadOnlyList<JobAdvertiser>> GetByCompanyNameAsync(string companyName, int pageNumber = 1, int pageSize = 10);
+        Task<IReadOnlyList<JobAdvertiser>> GetOrderedByContactEmailAsync(int pageNumber = 1, int pageSize = 10);
+        Task<IReadOnlyList<JobAdvertiser>> GetWithPostedJobsAsync(int pageNumber = 1, int pageSize = 10);
         Task<JobAdvertiser> GetByContactEmailAsync(string email);
     }
 }

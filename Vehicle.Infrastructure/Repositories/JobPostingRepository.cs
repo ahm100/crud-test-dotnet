@@ -14,33 +14,34 @@ namespace Vehicle.Infrastructure.Repositories
         {
         }
 
-        public async Task<IReadOnlyList<JobPosting>> GetByTitleAsync(string title)
+        public async Task<IReadOnlyList<JobPosting>> GetByTitleAsync(string title, int pageNumber = 1, int pageSize = 10)
         {
-            return await GetAsync(jp => jp.Title.Contains(title));
+            return await GetAsync(jp => jp.Title.Contains(title), pageNumber: pageNumber, pageSize: pageSize);
         }
 
-        public async Task<IReadOnlyList<JobPosting>> GetOrderedByDatePostedAsync()
+        public async Task<IReadOnlyList<JobPosting>> GetOrderedByDatePostedAsync(int pageNumber = 1, int pageSize = 10)
         {
-            return await GetAsync(predicate: null, orderBy: query => query.OrderBy(jp => jp.PostDate), includeString: null);
+            return await GetAsync(predicate: null, orderBy: query => query.OrderBy(jp => jp.PostDate), includeString: null, disableTracking: true, pageNumber: pageNumber, pageSize: pageSize);
         }
 
-        public async Task<IReadOnlyList<JobPosting>> GetWithAdvertiserAsync()
+        public async Task<IReadOnlyList<JobPosting>> GetWithAdvertiserAsync(int pageNumber = 1, int pageSize = 10)
         {
             var includes = new List<Expression<Func<JobPosting, object>>>
             {
                 jp => jp.JobAdvertiser
             };
-            return await GetAsync(predicate: null, orderBy: null, includes: includes);
+            return await GetAsync(predicate: null, orderBy: null, includes: includes, disableTracking: true, pageNumber: pageNumber, pageSize: pageSize);
         }
 
         public async Task<JobPosting> GetByReferenceNumberAsync(string referenceNumber)
         {
-            return (await GetAsync(jp => jp.ReferenceNumber == referenceNumber)).FirstOrDefault();
+            var jobPostings = await GetAsync(jp => jp.ReferenceNumber == referenceNumber, orderBy: null, includeString: null, disableTracking: true);
+            return jobPostings.FirstOrDefault();
         }
 
-        public async Task<IReadOnlyList<JobPosting>> GetByCategoryIdAsync(int categoryId) 
-        { 
-            return await GetAsync(jp => jp.JobCategoryId == categoryId);
+        public async Task<IReadOnlyList<JobPosting>> GetByCategoryIdAsync(int categoryId, int pageNumber = 1, int pageSize = 10)
+        {
+            return await GetAsync(jp => jp.JobCategoryId == categoryId, pageNumber: pageNumber, pageSize: pageSize);
         }
     }
 }

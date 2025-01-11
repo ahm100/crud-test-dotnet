@@ -14,28 +14,29 @@ namespace Vehicle.Infrastructure.Repositories
         {
         }
 
-        public async Task<IReadOnlyList<JobAdvertiser>> GetByCompanyNameAsync(string companyName)
+        public async Task<IReadOnlyList<JobAdvertiser>> GetByCompanyNameAsync(string companyName, int pageNumber = 1, int pageSize = 10)
         {
-            return await GetAsync(ja => ja.CompanyName == companyName);
+            return await GetAsync(ja => ja.CompanyName.Contains(companyName), pageNumber: pageNumber, pageSize: pageSize);
         }
 
-        public async Task<IReadOnlyList<JobAdvertiser>> GetOrderedByContactEmailAsync()
+        public async Task<IReadOnlyList<JobAdvertiser>> GetOrderedByContactEmailAsync(int pageNumber = 1, int pageSize = 10)
         {
-            return await GetAsync(predicate: null, orderBy: query => query.OrderBy(ja => ja.ContactEmail), includeString: null);
+            return await GetAsync(predicate: null, orderBy: query => query.OrderBy(ja => ja.ContactEmail), includeString: null, disableTracking: true, pageNumber: pageNumber, pageSize: pageSize);
         }
 
-        public async Task<IReadOnlyList<JobAdvertiser>> GetWithPostedJobsAsync()
+        public async Task<IReadOnlyList<JobAdvertiser>> GetWithPostedJobsAsync(int pageNumber = 1, int pageSize = 10)
         {
             var includes = new List<Expression<Func<JobAdvertiser, object>>>
             {
                 ja => ja.JobPostings
             };
-            return await GetAsync(predicate: null, orderBy: null, includes: includes);
+            return await GetAsync(predicate: null, orderBy: null, includes: includes, disableTracking: true, pageNumber: pageNumber, pageSize: pageSize);
         }
 
         public async Task<JobAdvertiser> GetByContactEmailAsync(string email)
         {
-            return (await GetAsync(ja => ja.ContactEmail == email)).FirstOrDefault();
+            var jobAdvertisers = await GetAsync(ja => ja.ContactEmail == email, orderBy: null, includeString: null, disableTracking: true);
+            return jobAdvertisers.FirstOrDefault();
         }
     }
 }

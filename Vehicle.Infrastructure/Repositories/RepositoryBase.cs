@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 using Vehicle.Application.Contracts.Persistence;
 using Vehicle.Domain.Common;
@@ -20,17 +19,17 @@ namespace Vehicle.Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<IReadOnlyList<T>> GetAllAsync()
+        public async Task<IReadOnlyList<T>> GetAllAsync(int pageNumber = 1, int pageSize = 10)
         {
-            return await _dbContext.Set<T>().ToListAsync();
+            return await ApplyPagination(_dbContext.Set<T>(), pageNumber, pageSize).ToListAsync();
         }
 
-        public async Task<IReadOnlyList<T>> GetAsync(Expression<Func<T, bool>> predicate)
+        public async Task<IReadOnlyList<T>> GetAsync(Expression<Func<T, bool>> predicate, int pageNumber = 1, int pageSize = 10)
         {
-            return await _dbContext.Set<T>().Where(predicate).ToListAsync();
+            return await ApplyPagination(_dbContext.Set<T>().Where(predicate), pageNumber, pageSize).ToListAsync();
         }
 
-        public async Task<IReadOnlyList<T>> GetAsync(Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeString = null, bool disableTracking = true)
+        public async Task<IReadOnlyList<T>> GetAsync(Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeString = null, bool disableTracking = true, int pageNumber = 1, int pageSize = 10)
         {
             IQueryable<T> query = _dbContext.Set<T>();
             if (disableTracking) query = query.AsNoTracking();
@@ -39,12 +38,12 @@ namespace Vehicle.Infrastructure.Repositories
 
             if (predicate != null) query = query.Where(predicate);
 
-            if (orderBy != null)
-                return await orderBy(query).ToListAsync();
-            return await query.ToListAsync();
+            if (orderBy != null) query = orderBy(query);
+
+            return await ApplyPagination(query, pageNumber, pageSize).ToListAsync();
         }
 
-        public async Task<IReadOnlyList<T>> GetAsync(Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, List<Expression<Func<T, object>>> includes = null, bool disableTracking = true)
+        public async Task<IReadOnlyList<T>> GetAsync(Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, List<Expression<Func<T, object>>> includes = null, bool disableTracking = true, int pageNumber = 1, int pageSize = 10)
         {
             IQueryable<T> query = _dbContext.Set<T>();
             if (disableTracking) query = query.AsNoTracking();
@@ -53,9 +52,9 @@ namespace Vehicle.Infrastructure.Repositories
 
             if (predicate != null) query = query.Where(predicate);
 
-            if (orderBy != null)
-                return await orderBy(query).ToListAsync();
-            return await query.ToListAsync();
+            if (orderBy != null) query = orderBy(query);
+
+            return await ApplyPagination(query, pageNumber, pageSize).ToListAsync();
         }
 
         public virtual async Task<T> GetByIdAsync(int id)
@@ -80,6 +79,11 @@ namespace Vehicle.Infrastructure.Repositories
         {
             _dbContext.Set<T>().Remove(entity);
             await _dbContext.SaveChangesAsync();
+        }
+
+        private IQueryable<T> ApplyPagination(IQueryable<T> query, int pageNumber, int pageSize)
+        {
+            return query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
         }
     }
 }
