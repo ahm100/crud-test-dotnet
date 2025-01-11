@@ -50,5 +50,12 @@ namespace Vehicle.API.Controllers
             var result = await _mediator.Send(new GetJobPostingsWithAdvertiserQuery());
             return Ok(result);
         }
+
+        [HttpGet("ordered-by-date")]
+        public async Task<IActionResult> GetOrderedByDate()
+        {
+            var result = await _mediator.Send(new GetJobPostingsOrderedByDateQuery());
+            return Ok(result);
+        }
     }
 }
