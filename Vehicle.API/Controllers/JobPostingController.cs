@@ -43,5 +43,12 @@ namespace Vehicle.API.Controllers
             var result = await _mediator.Send(new GetJobsByCategoryIdQuery { CategoryId = categoryId });
             return Ok(result);
         }
+
+        [HttpGet("with-advertiser")]
+        public async Task<IActionResult> GetWithAdvertiser()
+        {
+            var result = await _mediator.Send(new GetJobPostingsWithAdvertiserQuery());
+            return Ok(result);
+        }
     }
 }
