@@ -15,6 +15,7 @@ using Vehicle.Application.Contracts.Persistence;
 using Vehicle.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Vehicle.Infrastructure.Persistence;
+using AutoMapper;
 
 namespace TestProject
 {
@@ -44,7 +45,7 @@ namespace TestProject
 
             //It.IsAny<Customer>(): This expression represents any instance of the Customer class. When you use it in a Moq setup, it allows the mocked method to accept any Customer object as an argument.
 
-            var handler = new CreateCustomerHandler(mockCustomerRepository.Object, validatorMock.Object, loggerMock.Object);
+            var handler = new CreateCustomerHandler(mockCustomerRepository.Object, validatorMock.Object, loggerMock.Object,mapper: null);
 
             var command = new CreateCustomerCommand
             {
