@@ -20,5 +20,12 @@ namespace Vehicle.Domain.Entities.Concrete
         // Foreign key to JobAdvertiser
         public int JobAdvertiserId { get; set; }
         public JobAdvertiser JobAdvertiser { get; set; } // Navigation property 
+
+
+        // Foreign key to JobCategory
+        public int JobCategoryId { get; set; } 
+        public JobCategory JobCategory { get; set; } // Navigation property
+
+
     }
 }

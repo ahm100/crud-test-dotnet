@@ -37,5 +37,10 @@ namespace Vehicle.Infrastructure.Repositories
         {
             return (await GetAsync(jp => jp.ReferenceNumber == referenceNumber)).FirstOrDefault();
         }
+
+        public async Task<IReadOnlyList<JobPosting>> GetByCategoryIdAsync(int categoryId) 
+        { 
+            return await GetAsync(jp => jp.JobCategoryId == categoryId);
+        }
     }
 }

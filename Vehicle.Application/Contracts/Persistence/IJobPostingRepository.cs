@@ -10,5 +10,7 @@ namespace Vehicle.Application.Contracts.Persistence
         Task<IReadOnlyList<JobPosting>> GetOrderedByDatePostedAsync();
         Task<IReadOnlyList<JobPosting>> GetWithAdvertiserAsync();
         Task<JobPosting> GetByReferenceNumberAsync(string referenceNumber);
+        Task<IReadOnlyList<JobPosting>> GetByCategoryIdAsync(int categoryId);
+
     }
 }
