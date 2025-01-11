@@ -11,7 +11,7 @@ using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Vehicle.Application.Common.Exceptions;
 
-namespace Vehicle.Application.Features.JobAdvertisers.Commands.Hnadlers
+namespace Vehicle.Application.Features.JobAdvertisers.Commands.Handlers
 {
     public class UpdateJobAdvertiserHandler : IRequestHandler<UpdateJobAdvertiserCommand>
     {

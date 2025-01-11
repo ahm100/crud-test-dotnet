@@ -1,17 +1,12 @@
 ﻿using FluentValidation;
 using PhoneNumbers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vehicle.Domain.Entities.Concrete;
 
-namespace Vehicle.Application.Features.Customers.Validators
+namespace Vehicle.Application.Features.JobSeekers.Validators
 {
-    public class CustomerValidator : AbstractValidator<Customer>
+    public class JobSeekerValidator : AbstractValidator<JobSeeker>
     {
-        public CustomerValidator()
+        public JobSeekerValidator()
         {
             RuleFor(x => x.FirstName).NotEmpty();
             RuleFor(x => x.LastName).NotEmpty();
@@ -19,6 +14,8 @@ namespace Vehicle.Application.Features.Customers.Validators
             RuleFor(x => x.PhoneNumber).NotEmpty().Must(BeAValidPhoneNumber);
             RuleFor(x => x.Email).NotEmpty().EmailAddress();
             RuleFor(x => x.BankAccountNumber).NotEmpty();
+            RuleFor(x => x.Skills).NotEmpty();
+            RuleFor(x => x.Experience).NotEmpty();
         }
 
         private bool BeAValidPhoneNumber(string phoneNumber)

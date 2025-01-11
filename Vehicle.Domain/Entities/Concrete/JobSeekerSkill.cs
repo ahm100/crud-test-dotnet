@@ -13,6 +13,6 @@ namespace Vehicle.Domain.Entities.Concrete
         [ForeignKey("JobSeeker")] 
         public int JobSeekerId { get; set; }
         public JobSeeker JobSeeker { get; set; }
-        public string Skill { get; set; }
+        public string SkillName { get; set; }
     }
 }

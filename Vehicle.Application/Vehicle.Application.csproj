@@ -18,5 +18,9 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\Vehicle.Domain\Vehicle.Domain.csproj" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Features\JobSeekers\Queries\Handlers\" />
+	</ItemGroup>
 	
 </Project>

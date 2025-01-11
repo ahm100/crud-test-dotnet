@@ -10,7 +10,7 @@ using Vehicle.Domain.Entities.Concrete;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 
-namespace Vehicle.Application.Features.JobAdvertisers.Commands.Hnadlers
+namespace Vehicle.Application.Features.JobAdvertisers.Commands.Handlers
 {
     public class CreateJobAdvertiserHandler : IRequestHandler<CreateJobAdvertiserCommand, int>
     {

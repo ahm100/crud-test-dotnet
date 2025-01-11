@@ -25,7 +25,8 @@ namespace Vehicle.Application.Features.JobAdvertisers.Validators
             var phoneUtil = PhoneNumberUtil.GetInstance();
             try
             {
-                var numberProto = phoneUtil.Parse(phoneNumber, "US");
+                //var numberProto = phoneUtil.Parse(phoneNumber, "US");
+                var numberProto = phoneUtil.Parse(phoneNumber, null);
                 return phoneUtil.IsValidNumber(numberProto);
             }
             catch (NumberParseException)

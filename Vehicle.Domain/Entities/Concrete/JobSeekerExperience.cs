@@ -14,5 +14,9 @@ namespace Vehicle.Domain.Entities.Concrete
         public int JobSeekerId { get; set; }
         public JobSeeker JobSeeker { get; set; }
         public string Experience { get; set; }
+        public string Company { get; set; }
+        public string Role { get; set; }
+        public DateTime StartJobDate { get; set; }
+        public DateTime EndJobDate { get; set; }
     }
 }

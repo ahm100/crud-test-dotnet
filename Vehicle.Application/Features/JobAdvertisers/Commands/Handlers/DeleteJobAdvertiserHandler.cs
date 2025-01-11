@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 using Vehicle.Application.Common.Exceptions;
 using Vehicle.Domain.Entities.Concrete;
 
-namespace Vehicle.Application.Features.JobAdvertisers.Commands.Hnadlers
+namespace Vehicle.Application.Features.JobAdvertisers.Commands.Handlers
 {
     public class DeleteJobAdvertiserHandler : IRequestHandler<DeleteJobAdvertiserCommand>
     {

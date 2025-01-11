@@ -17,7 +17,7 @@ namespace Vehicle.Infrastructure.Repositories
 
         public async Task<IReadOnlyList<JobSeeker>> GetBySkillAsync(string skill)
         {
-            return await GetAsync(js => js.Skills.Any(s => s.Skill == skill));
+            return await GetAsync(js => js.Skills.Any(s => s.SkillName == skill));
         }
 
         public async Task<IReadOnlyList<JobSeeker>> GetByBirthYearAsync(int year)
