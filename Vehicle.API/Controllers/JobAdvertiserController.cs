@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Vehicle.Application.Features.JobAdvertisers.Commands;
+using Vehicle.Application.Features.JobAdvertisers.Queries;
 
 namespace Vehicle.API.Controllers
 {
@@ -19,6 +20,25 @@ namespace Vehicle.API.Controllers
         public async Task<IActionResult> Create([FromBody] CreateJobAdvertiserCommand command)
         {
             var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateJobAdvertiserCommand command)
+        {
+            if (id != command.Id)
+            {
+                return BadRequest("ID mismatch");
+            }
+
+            await _mediator.Send(command);
+            return NoContent();
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var result = await _mediator.Send(new GetJobAdvertiserByIdQuery { Id = id });
             return Ok(result);
         }
     }

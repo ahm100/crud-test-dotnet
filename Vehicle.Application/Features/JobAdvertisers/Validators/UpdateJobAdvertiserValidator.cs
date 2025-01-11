@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FluentValidation;
+﻿using FluentValidation;
 using PhoneNumbers;
-using Vehicle.Domain.Entities.Concrete;
 
-namespace Vehicle.Application.Features.JobAdvertisers.Validators
+namespace Vehicle.Application.Features.JobAdvertisers.Commands
 {
-    public class JobAdvertiserValidator : AbstractValidator<JobAdvertiser>
+    public class UpdateJobAdvertiserValidator : AbstractValidator<UpdateJobAdvertiserCommand>
     {
-        public JobAdvertiserValidator()
+        public UpdateJobAdvertiserValidator()
         {
             RuleFor(x => x.CompanyName).NotEmpty();
             //RuleFor(x => x.Description).NotEmpty();
@@ -35,4 +29,3 @@ namespace Vehicle.Application.Features.JobAdvertisers.Validators
         }
     }
 }
-

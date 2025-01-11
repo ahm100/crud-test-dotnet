@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Net;
@@ -7,7 +8,7 @@ using Vehicle.Application.Common.Exceptions;
 
 namespace Vehicle.API.Middleware
 {
-    
+
     public class ExceptionHandlingMiddleware
     {
         private readonly RequestDelegate _next;
@@ -30,6 +31,13 @@ namespace Vehicle.API.Middleware
                 _logger.LogWarning($"Not Found: {ex.Message}");
                 await HandleNotFoundExceptionAsync(context, ex);
             }
+            //catch (SqlException ex) {
+            //    if (ex.Number == 2627 || ex.Number == 2601)
+            //    {
+            //        context.Response.StatusCode = StatusCodes.Status409Conflict;
+            //        await context.Response.WriteAsync("Duplicate key error. Conflict with the current state of the resource.");
+            //    }
+            //}
             catch (Exception ex)
             {
                 _logger.LogError($"Something went wrong: {ex}");
@@ -61,7 +69,7 @@ namespace Vehicle.API.Middleware
             {
                 StatusCode = context.Response.StatusCode,
                 Message = "Internal Server Error from the middleware.",
-                Detail = exception.Message
+                Detail = exception.Message + ":( " + exception.InnerException + ")"
             };
 
             return context.Response.WriteAsJsonAsync(result);

@@ -8,8 +8,9 @@ using MediatR;
 
 namespace Vehicle.Application.Features.JobAdvertisers.Commands
 {
-    public class CreateJobAdvertiserCommand : IRequest<int>
+    public class UpdateJobAdvertiserCommand : IRequest
     {
+        public int Id { get; set; }
         [Required]
         public string CompanyName { get; set; }
         public string Description { get; set; }
