@@ -10,12 +10,14 @@ using Vehicle.Domain.Entities.Concrete;
 
 namespace Vehicle.Application.Mappings
 {
-    public class MappingProfile : Profile
+    public class CustomerProfile : Profile
     {
-        public MappingProfile() 
+        public CustomerProfile() 
         {
             CreateMap<Customer, CustomerVM>().ReverseMap();
             CreateMap<Customer, UpdateCustomerCommand>().ReverseMap();
+            CreateMap<CreateCustomerCommand, Customer>()
+                .ForMember(dest => dest.PhoneNumber, opt => opt.Ignore()); // We'll handle PhoneNumber formatting separately
         }
     }
 }
