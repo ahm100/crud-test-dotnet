@@ -55,6 +55,9 @@ namespace Vehicle.Infrastructure
             services.AddScoped(typeof(IAsyncRepository<>), typeof(RepositoryBase<>));
 
             services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<IJobAdvertiserRepository, JobAdvertiserRepository>();
+            services.AddScoped<IJobSeekerRepository, JobSeekerRepository>();
+            services.AddScoped<IJobPostingRepository, JobPostingRepository>();
             services.AddTransient<IUserService, UserService>();
 
             return services;
