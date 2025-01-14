@@ -10,7 +10,11 @@ namespace Vehicle.Application.Mapping
     {
         public JobPostingProfile()
         {
-            CreateMap<CreateJobPostingCommand, JobPosting>();
+            CreateMap<CreateJobPostingCommand, JobPosting>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore()); // ID should be ignored when creating a new entity
+
+            CreateMap<UpdateJobPostingCommand, JobPosting>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
 
             CreateMap<JobPosting, JobPostingDto>()
                 .ForMember(dest => dest.JobAdvertiserName, opt => opt.MapFrom(src => src.JobAdvertiser.CompanyName))

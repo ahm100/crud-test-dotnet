@@ -33,15 +33,7 @@ namespace Vehicle.Infrastructure.Repositories
                 disableTracking: true, pageNumber: pageNumber, pageSize: pageSize);
         }
 
-        //public async Task<IReadOnlyList<JobSeeker>> GetWithRelatedDataAsync(int pageNumber = 1, int pageSize = 10)
-        //{
-        //    var includes = new List<Expression<Func<JobSeeker, object>>>
-        //    {
-        //        js => js.Skills,
-        //        js => js.Experience
-        //    };
-        //    return await GetAsync(predicate: null, orderBy: null, includes: includes, disableTracking: true, pageNumber: pageNumber, pageSize: pageSize);
-        //}
+     
         public async Task<IReadOnlyList<JobSeeker>> GetWithRelatedDataAsync(int pageNumber = 1, int pageSize = 10)
         {
             var includes = new string[] { "Skills", "Experience" };

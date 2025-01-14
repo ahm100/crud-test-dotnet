@@ -23,6 +23,22 @@ namespace Vehicle.API.Controllers
             return Ok(result);
         }
 
+        // Update job posting
+        [HttpPut]
+        public async Task<IActionResult> UpdateJobPosting([FromBody] UpdateJobPostingCommand command)
+        {
+            var result = await _mediator.Send(command); return Ok(result);
+        }
+
+        //delete
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteJobPosting(int id)
+        { 
+            var command = new DeleteJobPostingCommand(id);
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
