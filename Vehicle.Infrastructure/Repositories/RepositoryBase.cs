@@ -29,12 +29,34 @@ namespace Vehicle.Infrastructure.Repositories
             return await ApplyPagination(_dbContext.Set<T>().Where(predicate), pageNumber, pageSize).ToListAsync();
         }
 
-        public async Task<IReadOnlyList<T>> GetAsync(Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeString = null, bool disableTracking = true, int pageNumber = 1, int pageSize = 10)
+        /*
+             var products = await repository.GetAsync(
+                predicate: p => p.Category.Name == "Electronics",  // Filter products by category name
+                includes: new string[] { "Category", "Supplier" },  // Include Category and Supplier in the query
+                orderBy: products => products.OrderBy(p => p.Name),  // Order by product name
+                disableTracking: true,
+                pageNumber: 1,
+                pageSize: 10
+            );
+
+         */
+        public async Task<IReadOnlyList<T>> GetAsync(
+            Expression<Func<T, bool>> predicate = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+            string[] includes = null,
+            bool disableTracking = true,
+            int pageNumber = 1, int pageSize = 10)
         {
             IQueryable<T> query = _dbContext.Set<T>();
             if (disableTracking) query = query.AsNoTracking();
 
-            if (!string.IsNullOrWhiteSpace(includeString)) query = query.Include(includeString);
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
 
             if (predicate != null) query = query.Where(predicate);
 
@@ -43,19 +65,24 @@ namespace Vehicle.Infrastructure.Repositories
             return await ApplyPagination(query, pageNumber, pageSize).ToListAsync();
         }
 
-        public async Task<IReadOnlyList<T>> GetAsync(Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, List<Expression<Func<T, object>>> includes = null, bool disableTracking = true, int pageNumber = 1, int pageSize = 10)
-        {
-            IQueryable<T> query = _dbContext.Set<T>();
-            if (disableTracking) query = query.AsNoTracking();
+        //public async Task<IReadOnlyList<T>> GetAsync(
+        //    Expression<Func<T, bool>> predicate = null,
+        //    Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+        //    List<Expression<Func<T, object>>> includes = null,
+        //    bool disableTracking = true,
+        //    int pageNumber = 1, int pageSize = 10)
+        //{
+        //    IQueryable<T> query = _dbContext.Set<T>();
+        //    if (disableTracking) query = query.AsNoTracking();
 
-            if (includes != null) query = includes.Aggregate(query, (current, include) => current.Include(include));
+        //    if (includes != null) query = includes.Aggregate(query, (current, include) => current.Include(include));
 
-            if (predicate != null) query = query.Where(predicate);
+        //    if (predicate != null) query = query.Where(predicate);
 
-            if (orderBy != null) query = orderBy(query);
+        //    if (orderBy != null) query = orderBy(query);
 
-            return await ApplyPagination(query, pageNumber, pageSize).ToListAsync();
-        }
+        //    return await ApplyPagination(query, pageNumber, pageSize).ToListAsync();
+        //}
 
         public virtual async Task<T> GetByIdAsync(int id)
         {
@@ -84,6 +111,25 @@ namespace Vehicle.Infrastructure.Repositories
         private IQueryable<T> ApplyPagination(IQueryable<T> query, int pageNumber, int pageSize)
         {
             return query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+        }
+
+        public async Task<PaginatedList<T>> GetAllPaginatedWithCountAsync(int pageNumber = 1, int pageSize = 10)
+        {
+            return await CreatePaginatedListWithCountAsync(_dbContext.Set<T>(), pageNumber, pageSize);
+        }
+
+        public async Task<PaginatedList<T>> GetPaginatedWithCountAsync(Expression<Func<T, bool>> predicate, int pageNumber = 1, int pageSize = 10)
+        {
+            return await CreatePaginatedListWithCountAsync(_dbContext.Set<T>().Where(predicate), pageNumber, pageSize);
+        }
+
+
+
+        private async Task<PaginatedList<T>> CreatePaginatedListWithCountAsync(IQueryable<T> source, int pageNumber, int pageSize)
+        {
+            var count = await source.CountAsync();
+            var items = await source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+            return new PaginatedList<T>(items, count, pageNumber, pageSize);
         }
     }
 }

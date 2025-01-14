@@ -26,22 +26,40 @@ namespace Vehicle.Infrastructure.Repositories
 
         public async Task<IReadOnlyList<JobSeeker>> GetOrderedByLastNameAsync(int pageNumber = 1, int pageSize = 10)
         {
-            return await GetAsync(predicate: null, orderBy: query => query.OrderBy(js => js.LastName), includeString: null, disableTracking: true, pageNumber: pageNumber, pageSize: pageSize);
+            return await GetAsync(
+                predicate: null, 
+                orderBy: query => query.OrderBy(js => js.LastName), 
+                includes: new string[] { },  //[posts, advertiser,...] could include any relaed table
+                disableTracking: true, pageNumber: pageNumber, pageSize: pageSize);
         }
 
+        //public async Task<IReadOnlyList<JobSeeker>> GetWithRelatedDataAsync(int pageNumber = 1, int pageSize = 10)
+        //{
+        //    var includes = new List<Expression<Func<JobSeeker, object>>>
+        //    {
+        //        js => js.Skills,
+        //        js => js.Experience
+        //    };
+        //    return await GetAsync(predicate: null, orderBy: null, includes: includes, disableTracking: true, pageNumber: pageNumber, pageSize: pageSize);
+        //}
         public async Task<IReadOnlyList<JobSeeker>> GetWithRelatedDataAsync(int pageNumber = 1, int pageSize = 10)
         {
-            var includes = new List<Expression<Func<JobSeeker, object>>>
-            {
-                js => js.Skills,
-                js => js.Experience
-            };
-            return await GetAsync(predicate: null, orderBy: null, includes: includes, disableTracking: true, pageNumber: pageNumber, pageSize: pageSize);
+            var includes = new string[] { "Skills", "Experience" };
+            return await GetAsync(
+                predicate: null,
+                orderBy: null,
+                includes: includes,
+                disableTracking: true,
+                pageNumber: pageNumber,
+                pageSize: pageSize
+            );
         }
 
         public async Task<JobSeeker> GetByEmailAsync(string email)
         {
-            var jobSeekers = await GetAsync(js => js.Email == email, orderBy: null, includeString: null, disableTracking: true);
+            var jobSeekers = await GetAsync(js => js.Email == email, orderBy: null,
+                includes: new string[] { },  //[posts, advertiser,...] could include any relaed table
+                disableTracking: true);
             return jobSeekers.FirstOrDefault();
         }
     }

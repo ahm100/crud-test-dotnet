@@ -21,21 +21,36 @@ namespace Vehicle.Infrastructure.Repositories
 
         public async Task<IReadOnlyList<JobAdvertiser>> GetOrderedByContactEmailAsync(int pageNumber = 1, int pageSize = 10)
         {
-            return await GetAsync(predicate: null, orderBy: query => query.OrderBy(ja => ja.ContactEmail), includeString: null, disableTracking: true, pageNumber: pageNumber, pageSize: pageSize);
+            return await GetAsync(
+                predicate: null,
+                orderBy: query => query.OrderBy(ja => ja.ContactEmail),
+                includes: (string[])null,  // Use string[] includes
+                disableTracking: true,
+                pageNumber: pageNumber,
+                pageSize: pageSize
+            );
         }
+
 
         public async Task<IReadOnlyList<JobAdvertiser>> GetWithPostedJobsAsync(int pageNumber = 1, int pageSize = 10)
         {
-            var includes = new List<Expression<Func<JobAdvertiser, object>>>
-            {
-                ja => ja.JobPostings
-            };
-            return await GetAsync(predicate: null, orderBy: null, includes: includes, disableTracking: true, pageNumber: pageNumber, pageSize: pageSize);
+            var includes = new string[] { "JobPostings" };
+            return await GetAsync(
+                predicate: null,
+                orderBy: null,
+                includes: includes,
+                disableTracking: true,
+                pageNumber: pageNumber,
+                pageSize: pageSize
+            );
         }
+
 
         public async Task<JobAdvertiser> GetByContactEmailAsync(string email)
         {
-            var jobAdvertisers = await GetAsync(ja => ja.ContactEmail == email, orderBy: null, includeString: null, disableTracking: true);
+            var jobAdvertisers = await GetAsync(ja => ja.ContactEmail == email, orderBy: null, 
+                includes: new string[] { },  //[jobseeker, advertiser,...] could include any relaed table
+                disableTracking: true);
             return jobAdvertisers.FirstOrDefault();
         }
     }

@@ -19,23 +19,38 @@ namespace Vehicle.Infrastructure.Repositories
             return await GetAsync(jp => jp.Title.Contains(title), pageNumber: pageNumber, pageSize: pageSize);
         }
 
-        public async Task<IReadOnlyList<JobPosting>> GetOrderedByDatePostedAsync(int pageNumber = 1, int pageSize = 10)
+        public async Task<IReadOnlyList<JobPosting>> GetOrderedByDatePostedAsync(
+            int pageNumber = 1, int pageSize = 10)
         {
-            return await GetAsync(predicate: null, orderBy: query => query.OrderBy(jp => jp.PostDate), includeString: null, disableTracking: true, pageNumber: pageNumber, pageSize: pageSize);
+            return await GetAsync(
+                predicate: null,
+                orderBy: query => query.OrderBy(jp => jp.PostDate),
+                includes: new string[] { },  //[jobseeker, advertiser,...] could include any relaed table
+                disableTracking: true,
+                pageNumber: pageNumber,
+                pageSize: pageSize
+            );
         }
+
 
         public async Task<IReadOnlyList<JobPosting>> GetWithAdvertiserAsync(int pageNumber = 1, int pageSize = 10)
         {
-            var includes = new List<Expression<Func<JobPosting, object>>>
-            {
-                jp => jp.JobAdvertiser
-            };
-            return await GetAsync(predicate: null, orderBy: null, includes: includes, disableTracking: true, pageNumber: pageNumber, pageSize: pageSize);
+            var includes = new string[] { "JobAdvertiser" };
+            return await GetAsync(
+                predicate: null,
+                orderBy: null,
+                includes: includes,
+                disableTracking: true,
+                pageNumber: pageNumber,
+                pageSize: pageSize
+            );
         }
+
 
         public async Task<JobPosting> GetByReferenceNumberAsync(string referenceNumber)
         {
-            var jobPostings = await GetAsync(jp => jp.ReferenceNumber == referenceNumber, orderBy: null, includeString: null, disableTracking: true);
+            var jobPostings = await GetAsync(jp => jp.ReferenceNumber == referenceNumber, orderBy: null, includes: new string[] { },  //[jobseeker, advertiser,...] could include any relaed table
+                disableTracking: true);
             return jobPostings.FirstOrDefault();
         }
 
