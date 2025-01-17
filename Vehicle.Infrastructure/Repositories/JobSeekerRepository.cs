@@ -16,8 +16,25 @@ namespace Vehicle.Infrastructure.Repositories
 
         public async Task<IReadOnlyList<JobSeeker>> GetBySkillAsync(string skill, int pageNumber = 1, int pageSize = 10)
         {
-            return await GetAsync(js => js.Skills.Any(s => s.SkillName == skill), pageNumber: pageNumber, pageSize: pageSize);
+            return await GetAsync(
+                js => js.Skills.Any(s => s.SkillName == skill),
+                pageNumber: pageNumber, 
+                pageSize: pageSize);
         }
+
+        public async Task<IReadOnlyList<JobSeeker>> GetBySomeSkillsAsync(List<string> recskills, int pageNumber = 1, int pageSize = 10)
+        {
+            //This is because Any is a more direct way to check if any elements in the collection meet the condition, whereas Where would return an IEnumerable that you'd have to evaluate further.
+            //if wanna have all of the skills use .All instead
+            //js => skills.All(skill => js.Skills.Any(s => s.SkillName == skill)),
+            return await GetAsync(
+                js => js.Skills.Any(s => recskills.Contains(s.SkillName)),
+                pageNumber: pageNumber,
+                pageSize: pageSize
+            );
+        }
+
+
 
         public async Task<IReadOnlyList<JobSeeker>> GetByBirthYearAsync(int year, int pageNumber = 1, int pageSize = 10)
         {
@@ -34,17 +51,26 @@ namespace Vehicle.Infrastructure.Repositories
         }
 
      
-        public async Task<IReadOnlyList<JobSeeker>> GetWithRelatedDataAsync(int pageNumber = 1, int pageSize = 10)
+        //public async Task<IReadOnlyList<JobSeeker>> GetWithRelatedDataAsync(int pageNumber = 1, int pageSize = 10)
+        //{
+        //    var includes = new string[] { "Skills", "Experience" };
+        //    return await GetAsync(
+        //        predicate: null,
+        //        orderBy: null,
+        //        includes: includes,
+        //        disableTracking: true,
+        //        pageNumber: pageNumber,
+        //        pageSize: pageSize
+        //    );
+        //}
+        public async Task<JobSeeker> GetByIdWithRelatedDataAsync(int id)
         {
             var includes = new string[] { "Skills", "Experience" };
-            return await GetAsync(
-                predicate: null,
-                orderBy: null,
-                includes: includes,
-                disableTracking: true,
-                pageNumber: pageNumber,
-                pageSize: pageSize
-            );
+            var jobSeekers = await GetAsync(
+                predicate: js => js.Id == id, 
+                includes: includes, 
+                disableTracking: true);
+            return jobSeekers.FirstOrDefault();
         }
 
         public async Task<JobSeeker> GetByEmailAsync(string email)
@@ -54,5 +80,7 @@ namespace Vehicle.Infrastructure.Repositories
                 disableTracking: true);
             return jobSeekers.FirstOrDefault();
         }
+
+       
     }
 }
