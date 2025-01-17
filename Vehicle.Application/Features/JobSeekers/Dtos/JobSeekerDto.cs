@@ -24,4 +24,12 @@ namespace Vehicle.Application.Features.JobSeekers.Dtos
         public DateTime StartJobDate { get; set; }
         public DateTime EndJobDate { get; set; }
     }
+
+    public class JobSeekerSkillDto
+    {
+        public string SkillName { get; set; }
+    }
+
+
 }
+
