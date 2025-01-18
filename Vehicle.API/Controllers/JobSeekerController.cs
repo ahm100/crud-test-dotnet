@@ -96,6 +96,16 @@ namespace Vehicle.API.Controllers
         }
 
 
+        [HttpGet("test-localization")]
+        public ActionResult TestLocalization([FromQuery] string culture = "fa")
+        {
+            var currentCulture = new CultureInfo(culture);
+            CultureInfo.CurrentCulture = currentCulture;
+            CultureInfo.CurrentUICulture = currentCulture;
+
+            var message = _localizer["GeneralError"];
+            return Ok(new { Message = message });
+        }
 
 
         [HttpPut("{id}")]
