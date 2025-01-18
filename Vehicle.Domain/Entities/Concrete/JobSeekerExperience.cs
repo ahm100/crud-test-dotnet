@@ -17,6 +17,6 @@ namespace Vehicle.Domain.Entities.Concrete
         public string Company { get; set; }
         public string Role { get; set; }
         public DateTime StartJobDate { get; set; }
-        public DateTime EndJobDate { get; set; }
+        public DateTime? EndJobDate { get; set; }
     }
 }

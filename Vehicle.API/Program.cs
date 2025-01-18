@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Vehicle.API.Middleware;
 using Vehicle.API.SwaggerFilter;
@@ -10,8 +11,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddApplicationServices();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-// builder.Services.AddSwaggerGen();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "LinkedJob API", Version = "v1" });
@@ -40,7 +39,6 @@ builder.Services.AddSwaggerGen(c =>
               new string[] {}
         }
     });
-    // Register the operation filter to handle AllowAnonymous endpoints
     c.OperationFilter<AllowAnonymousOperationFilter>();
 });
 
@@ -56,12 +54,15 @@ if (app.Environment.IsDevelopment())
 }
 app.UseRouting();
 
-app.UseMiddleware<TokenMiddleware>();// Use custom middleware to append Bearer prefix
+app.UseMiddleware<TokenMiddleware>(); // Use custom middleware to append Bearer prefix
 
 app.UseMiddleware<ExceptionHandlingMiddleware>(); // Register the middleware
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+var localizationOptions = app.Services.GetService<IOptions<RequestLocalizationOptions>>().Value;
+app.UseRequestLocalization(localizationOptions);
 
 app.MapControllers();
 

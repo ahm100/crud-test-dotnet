@@ -5,6 +5,11 @@ using System.Threading.Tasks;
 using Vehicle.Application.Features.JobSeekers.Commands;
 using Vehicle.Application.Features.JobSeekers.Queries;
 using Vehicle.Application.Features.JobSeekers.Dtos;
+using Microsoft.Extensions.Localization;
+using Vehicle.Application.Resources;
+using System.Globalization;
+using Vehicle.Application.Features.JobAdvertisers.Commands.Handlers;
+using FluentValidation;
 
 namespace Vehicle.API.Controllers
 {
@@ -13,14 +18,19 @@ namespace Vehicle.API.Controllers
     public class JobSeekersController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IStringLocalizer<JobSeekerResource> _localizer;
+        private readonly ILogger<JobSeekersController> _logger;
 
-        public JobSeekersController(IMediator mediator)
+        public JobSeekersController(IMediator mediator, IStringLocalizer<JobSeekerResource> localizer, ILogger<JobSeekersController> logger)
         {
             _mediator = mediator;
+            _localizer = localizer;
+            _logger = logger;
+
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<JobSeekerDto>> GetJobSeekerById(int id)
+        public async Task<ActionResult<JobSeekerDto>> GetJobSeekerById(int id, [FromQuery] string culture = "fa")
         {
             var jobSeeker = await _mediator.Send(new GetJobSeekerByIdQuery(id));
             if (jobSeeker == null)
@@ -59,13 +69,33 @@ namespace Vehicle.API.Controllers
             return Ok(jobSeekers);
         }
 
-
         [HttpPost]
-        public async Task<ActionResult<int>> CreateJobSeeker(CreateJobSeekerCommand command)
+        public async Task<ActionResult<int>> CreateJobSeeker([FromBody] CreateJobSeekerCommand command, [FromQuery] string culture = "fa")
         {
-            var jobSeekerId = await _mediator.Send(command);
-            return CreatedAtAction(nameof(GetJobSeekerById), new { id = jobSeekerId }, jobSeekerId);
+            var currentCulture = new CultureInfo(culture);
+            CultureInfo.CurrentCulture = currentCulture;
+            CultureInfo.CurrentUICulture = currentCulture;
+
+            try
+            {
+                var jobSeekerId = await _mediator.Send(command);
+                return CreatedAtAction(nameof(GetJobSeekerById), new { id = jobSeekerId }, jobSeekerId);
+            }
+            catch (ValidationException ex)
+            {
+                var errors = ex.Errors.Select(e => e.ErrorMessage).ToList();
+                _logger.LogError($"Validation error: {string.Join(", ", errors)}");
+                return BadRequest(new { Errors = errors });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to create job seeker: {ex.Message}");
+                return StatusCode(500, _localizer["InternalServerError"]);
+            }
         }
+
+
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateJobSeeker(int id, UpdateJobSeekerCommand command)

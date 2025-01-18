@@ -22,7 +22,9 @@ namespace Vehicle.Application.Features.JobSeekers.Dtos
         public string Company { get; set; }
         public string Role { get; set; }
         public DateTime StartJobDate { get; set; }
-        public DateTime EndJobDate { get; set; }
+        public DateTime? EndJobDate { get; set; }
+        public string Experience { get; set; }
+
     }
 
     public class JobSeekerSkillDto

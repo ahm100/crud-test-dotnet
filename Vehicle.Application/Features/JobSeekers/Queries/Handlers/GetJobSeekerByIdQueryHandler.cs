@@ -6,6 +6,8 @@ using Vehicle.Application.Common.Exceptions;
 using System.Threading;
 using System.Threading.Tasks;
 using Vehicle.Application.Features.JobSeekers.Dtos;
+using Microsoft.Extensions.Localization;
+using Vehicle.Application.Resources;
 
 namespace Vehicle.Application.Features.JobSeekers.Queries.Handlers
 {
@@ -13,11 +15,13 @@ namespace Vehicle.Application.Features.JobSeekers.Queries.Handlers
     {
         private readonly IJobSeekerRepository _repository;
         private readonly IMapper _mapper;
-
-        public GetJobSeekerByIdQueryHandler(IJobSeekerRepository repository, IMapper mapper)
+        private readonly IStringLocalizer<JobSeekerResource> _localizer;
+        public GetJobSeekerByIdQueryHandler(IJobSeekerRepository repository, 
+            IMapper mapper, IStringLocalizer<JobSeekerResource> localizer)
         {
             _repository = repository;
             _mapper = mapper;
+            _localizer = localizer;
         }
 
         public async Task<JobSeekerDto> Handle(GetJobSeekerByIdQuery request, CancellationToken cancellationToken)
