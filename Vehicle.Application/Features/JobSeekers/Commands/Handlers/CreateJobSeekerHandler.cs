@@ -28,17 +28,25 @@ namespace Vehicle.Application.Features.JobSeekers.Commands.Handlers
 
         public async Task<int> Handle(CreateJobSeekerCommand request, CancellationToken cancellationToken)
         {
+            // Check if the email already exists
+            var existingJobSeeker = await _repository.GetByEmailAsync(request.Email);
+            if (existingJobSeeker != null)
+            {
+                throw new ValidationException(_localizer["EmailAlreadyExists"]);
+            }
+
+            var jobSeeker = _mapper.Map<JobSeeker>(request);
+
             var validationResult = await _validator.ValidateAsync(request);
             if (!validationResult.IsValid)
             {
                 throw new ValidationException(validationResult.Errors);
             }
 
-            var jobSeeker = _mapper.Map<JobSeeker>(request);
-
             var result = await _repository.AddAsync(jobSeeker);
             _logger.LogInformation(_localizer["ExperienceAdded"]);
             return result.Id;
         }
+
     }
 }
