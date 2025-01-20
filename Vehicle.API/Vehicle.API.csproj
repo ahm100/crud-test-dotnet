@@ -23,10 +23,4 @@
     <ProjectReference Include="..\Vehicle.Shared\Vehicle.Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Update="Resources - Copy\Controllers\JobSeekersController.fa.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-
 </Project>
