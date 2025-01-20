@@ -11,8 +11,7 @@ using System.Globalization;
 using Vehicle.Application.Features.JobAdvertisers.Commands.Handlers;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
-using Vehicle.API.SharedResources;
-using Vehicle.Shared.Resources;
+using Vehicle.Shared.SharedResources;
 
 namespace Vehicle.API.Controllers
 {
@@ -22,13 +21,13 @@ namespace Vehicle.API.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IStringLocalizer<JobSeekersController> _localizer;
-        private readonly IStringLocalizer<Vehicle.Shared.SharedResources.SharedTranslate> _sharedLocalizer;
+        private readonly IStringLocalizer<SharedTranslate> _sharedLocalizer;
 
         private readonly ILogger<JobSeekersController> _logger;
 
         public JobSeekersController(IMediator mediator,
             IStringLocalizer<JobSeekersController> localizer,
-            IStringLocalizer<Vehicle.Shared.SharedResources.SharedTranslate> sharedLocalizer,
+            IStringLocalizer<SharedTranslate> sharedLocalizer,
             ILogger<JobSeekersController> logger)
         {
             _mediator = mediator;

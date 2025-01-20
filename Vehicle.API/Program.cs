@@ -6,7 +6,6 @@ using Vehicle.API.SwaggerFilter;
 using Vehicle.Application;
 using Vehicle.Application.Contracts;
 using Vehicle.Infrastructure;
-using Vehicle.Shared.Resources;
 
 var builder = WebApplication.CreateBuilder(args);
 
