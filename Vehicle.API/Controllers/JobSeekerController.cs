@@ -10,6 +10,7 @@ using Vehicle.Application.Resources;
 using System.Globalization;
 using Vehicle.Application.Features.JobAdvertisers.Commands.Handlers;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Vehicle.API.Controllers
 {
@@ -18,10 +19,15 @@ namespace Vehicle.API.Controllers
     public class JobSeekersController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly IStringLocalizer<JobSeekerResource> _localizer;
+        //private readonly IStringLocalizer<JobSeekerResource> _localizer;
+        private readonly IStringLocalizer<JobSeekersController> _localizer;
+        
         private readonly ILogger<JobSeekersController> _logger;
 
-        public JobSeekersController(IMediator mediator, IStringLocalizer<JobSeekerResource> localizer, ILogger<JobSeekersController> logger)
+        public JobSeekersController(IMediator mediator,
+            //IStringLocalizer<JobSeekerResource> localizer,
+            IStringLocalizer<JobSeekersController> localizer,
+            ILogger<JobSeekersController> logger)
         {
             _mediator = mediator;
             _localizer = localizer;
@@ -95,7 +101,7 @@ namespace Vehicle.API.Controllers
             }
         }
 
-
+        [AllowAnonymous]
         [HttpGet("test-localization")]
         public ActionResult TestLocalization([FromQuery] string culture = "fa")
         {
@@ -103,7 +109,8 @@ namespace Vehicle.API.Controllers
             CultureInfo.CurrentCulture = currentCulture;
             CultureInfo.CurrentUICulture = currentCulture;
 
-            var message = _localizer["GeneralError"];
+            //var message = _localizer["GeneralError"];
+            var message = _localizer["Hello World"];
             return Ok(new { Message = message });
         }
 
