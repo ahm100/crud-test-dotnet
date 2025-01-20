@@ -47,7 +47,7 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddInfrastructureServices(builder.Configuration);
 
-builder.Services.AddSingleton(typeof(ISharedLocalizer<>), typeof(SharedLocalizer<>));
+//builder.Services.AddSingleton(typeof(ISharedLocalizer<>), typeof(SharedLocalizer<>));
 
 
 var app = builder.Build();

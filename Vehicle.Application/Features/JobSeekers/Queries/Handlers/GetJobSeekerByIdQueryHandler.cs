@@ -7,7 +7,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Vehicle.Application.Features.JobSeekers.Dtos;
 using Microsoft.Extensions.Localization;
-using Vehicle.Application.Resources;
 using Vehicle.Application.Contracts;
 using Vehicle.Shared.Resources;
 
