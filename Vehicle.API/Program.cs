@@ -6,6 +6,7 @@ using Vehicle.API.SwaggerFilter;
 using Vehicle.Application;
 using Vehicle.Application.Contracts;
 using Vehicle.Infrastructure;
+using Vehicle.Shared.Resources;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,7 +46,8 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddInfrastructureServices(builder.Configuration);
-builder.Services.AddSingleton<ISharedLocalizer, SharedLocalizer>();
+
+builder.Services.AddSingleton(typeof(ISharedLocalizer<>), typeof(SharedLocalizer<>));
 
 
 var app = builder.Build();

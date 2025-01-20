@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vehicle.Application.Contracts
+namespace Vehicle.Shared.Resources
 {
-    public interface ISharedLocalizer
+    public interface ILocalizationMarker
     {
-        string this[string key] { get; }
     }
-
 }
