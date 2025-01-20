@@ -22,4 +22,10 @@
     <ProjectReference Include="..\Vehicle.Infrastructure\Vehicle.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Controllers\JobSeekersController.fa.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>
