@@ -1,8 +1,10 @@
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using Vehicle.API;
 using Vehicle.API.Middleware;
 using Vehicle.API.SwaggerFilter;
 using Vehicle.Application;
+using Vehicle.Application.Contracts;
 using Vehicle.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,6 +45,8 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddSingleton<ISharedLocalizer, SharedLocalizer>();
+
 
 var app = builder.Build();
 

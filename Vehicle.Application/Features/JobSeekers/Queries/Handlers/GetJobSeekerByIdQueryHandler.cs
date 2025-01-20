@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Vehicle.Application.Features.JobSeekers.Dtos;
 using Microsoft.Extensions.Localization;
 using Vehicle.Application.Resources;
+using Vehicle.Application.Contracts;
 
 namespace Vehicle.Application.Features.JobSeekers.Queries.Handlers
 {
@@ -15,9 +16,15 @@ namespace Vehicle.Application.Features.JobSeekers.Queries.Handlers
     {
         private readonly IJobSeekerRepository _repository;
         private readonly IMapper _mapper;
-        private readonly IStringLocalizer<JobSeekerResource> _localizer;
+        //private readonly IStringLocalizer<JobSeekerResource> _localizer;
+        private readonly ISharedLocalizer _localizer;
+
         public GetJobSeekerByIdQueryHandler(IJobSeekerRepository repository, 
-            IMapper mapper, IStringLocalizer<JobSeekerResource> localizer)
+            IMapper mapper,
+            //IStringLocalizer<JobSeekerResource> localizer
+            ISharedLocalizer localizer
+
+            )
         {
             _repository = repository;
             _mapper = mapper;
