@@ -10,6 +10,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Vehicle.Application.Services;
 
 namespace Vehicle.Application
 {
@@ -36,7 +37,7 @@ namespace Vehicle.Application
                 options.SupportedUICultures = supportedCultures;
             });
 
-
+            services.AddSingleton<CultureService>();
             return services;
         }
     }

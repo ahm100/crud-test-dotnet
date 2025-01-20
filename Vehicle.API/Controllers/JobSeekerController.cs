@@ -12,6 +12,7 @@ using Vehicle.Application.Features.JobAdvertisers.Commands.Handlers;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Vehicle.Shared.SharedResources;
+using Vehicle.Application.Services;
 
 namespace Vehicle.API.Controllers
 {
@@ -22,18 +23,20 @@ namespace Vehicle.API.Controllers
         private readonly IMediator _mediator;
         private readonly IStringLocalizer<JobSeekersController> _localizer;
         private readonly IStringLocalizer<SharedTranslate> _sharedLocalizer;
-
+        private readonly CultureService _cultureService;
         private readonly ILogger<JobSeekersController> _logger;
 
         public JobSeekersController(IMediator mediator,
             IStringLocalizer<JobSeekersController> localizer,
             IStringLocalizer<SharedTranslate> sharedLocalizer,
+            CultureService cultureService,
             ILogger<JobSeekersController> logger)
         {
             _mediator = mediator;
             _localizer = localizer;
             _sharedLocalizer = sharedLocalizer;
             _logger = logger;
+            _cultureService = cultureService;
 
         }
 
@@ -107,9 +110,10 @@ namespace Vehicle.API.Controllers
         [HttpGet("test-localization")]
         public ActionResult TestLocalization([FromQuery] string culture = "fa")
         {
-            var currentCulture = new CultureInfo(culture);
-            CultureInfo.CurrentCulture = currentCulture;
-            CultureInfo.CurrentUICulture = currentCulture;
+            //var currentCulture = new CultureInfo(culture);
+            //CultureInfo.CurrentCulture = currentCulture;
+            //CultureInfo.CurrentUICulture = currentCulture;
+            _cultureService.SetCulture(culture);
 
             var message = _sharedLocalizer["shared message"];
             //var message = _localizer["Hello World"];
