@@ -52,6 +52,14 @@ namespace Vehicle.Infrastructure
 
             services.AddControllersWithViews();
 
+            InjectInterfaces(services);
+
+            return services;
+
+        }
+
+        private static void InjectInterfaces(IServiceCollection services)
+        {
             services.AddScoped(typeof(IAsyncRepository<>), typeof(RepositoryBase<>));
 
             services.AddScoped<ICustomerRepository, CustomerRepository>();
@@ -59,9 +67,6 @@ namespace Vehicle.Infrastructure
             services.AddScoped<IJobSeekerRepository, JobSeekerRepository>();
             services.AddScoped<IJobPostingRepository, JobPostingRepository>();
             services.AddTransient<IUserService, UserService>();
-
-            return services;
-
         }
     }
 }

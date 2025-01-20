@@ -96,8 +96,8 @@ namespace Vehicle.API.Controllers
             {
                 var errors = ex.Errors.Select(e => e.ErrorMessage).ToList();
                 _logger.LogError($"Validation error: {string.Join(", ", errors)}");
-                //return BadRequest(new { Errors = errors });
-                return BadRequest(new { Errors = _localizer["GeneralError"] });
+                return BadRequest(new { Errors = errors });
+                //return BadRequest(new { Errors = _localizer["GeneralError"] });
             }
             catch (Exception ex)
             {
